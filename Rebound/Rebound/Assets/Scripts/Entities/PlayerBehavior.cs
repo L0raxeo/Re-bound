@@ -5,6 +5,7 @@ public class PlayerBehavior : MonoBehaviour
 
     public Rigidbody2D rb;
     public Weapon weapon;
+    public LevelManager levelManager;
 
     private bool touchedLastFrame = false;
 
@@ -59,9 +60,26 @@ public class PlayerBehavior : MonoBehaviour
         if (1.05 < pos.x) transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(0.05f, pos.y)).x, transform.position.y, transform.position.z);
     }
 
+    public void Die()
+    {
+        rb.velocity = Vector3.zero;
+        rb.AddTorque(50f);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (collision.collider.name == "Lava")
+        {
+            // pull up Game Over menu
+        }
+        else if (collision.collider.tag == "Obstacle")
+        {
+            // die
+        }
+        else if (collision.collider.tag == "Powerup")
+        {
+            // each powerup script will have a method called use so just look for that method in the collider and use it
+        }
     }
 
 }
