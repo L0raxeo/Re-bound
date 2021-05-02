@@ -5,6 +5,7 @@ public class PlayerBehavior : MonoBehaviour
 
     public Rigidbody2D rb;
     public Weapon weapon;
+    public ThrowHook hook;
     public LevelManager levelManager;
 
     private bool touchedLastFrame = false;
@@ -47,6 +48,7 @@ public class PlayerBehavior : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
             touchPosition.z = 0f;
+            hook.Throw(touchPosition);
             weapon.Use(touchPosition);
             Jump(touchPosition);
         }
@@ -56,8 +58,16 @@ public class PlayerBehavior : MonoBehaviour
     {
         Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
 
-        if (pos.x < -0.05) transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(1.05f, pos.y)).x, transform.position.y, transform.position.z);
-        if (1.05 < pos.x) transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(0.05f, pos.y)).x, transform.position.y, transform.position.z);
+        if (pos.x < -0.05)
+        {
+            transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(1.05f, pos.y)).x, transform.position.y, transform.position.z);
+            Destroy(hook.curHook);
+        }
+        if (1.05 < pos.x)
+        {
+            transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(0.05f, pos.y)).x, transform.position.y, transform.position.z);
+            Destroy(hook.curHook);
+        }
     }
 
     public void Die()
