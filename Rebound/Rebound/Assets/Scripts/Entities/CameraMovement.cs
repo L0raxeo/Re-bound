@@ -31,7 +31,7 @@ public class CameraMovement : MonoBehaviour
 
     private void CheckPlayerDeathByVoid()
     {
-        if (player.transform.position.y < transform.position.y - 17f)
+        if (player.transform.position.y < transform.position.y - 16.75f)
         {
             levelManager.EndGame();
         }

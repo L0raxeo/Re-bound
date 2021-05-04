@@ -41,6 +41,7 @@ public class PlayerBehavior : MonoBehaviour
         if (touchedLastFrame && Input.touchCount == 0)
         {
             touchedLastFrame = false;
+            Destroy(hook.curHook);
         }
         else if (!touchedLastFrame && Input.touchCount == 1)
         {
@@ -48,7 +49,8 @@ public class PlayerBehavior : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             Vector3 touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
             touchPosition.z = 0f;
-            hook.Throw(touchPosition);
+            if (hook.Throw(touchPosition))
+                return;
             weapon.Use(touchPosition);
             Jump(touchPosition);
         }
@@ -88,7 +90,7 @@ public class PlayerBehavior : MonoBehaviour
         }
         else if (collision.collider.tag == "Powerup")
         {
-            // each powerup script will have a method called use so just look for that method in the collider and use it
+            
         }
     }
 

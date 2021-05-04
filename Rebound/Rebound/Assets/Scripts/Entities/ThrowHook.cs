@@ -11,14 +11,20 @@ public class ThrowHook : MonoBehaviour
 
     public GameObject curHook;
 
-    public void Throw(Vector2 target)
+    public bool Throw(Vector2 target)
     {
         GameObject swingBlock = GameObject.Find("Swing Block");
 
-        if (swingBlock.GetComponent<CircleCollider2D>().bounds.Contains(target))
+        if (swingBlock != null && swingBlock.GetComponent<CircleCollider2D>().bounds.Contains(target))
         {
             Grapple(target);
         }
+        else
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void Grapple(Vector2 destination)
