@@ -86,11 +86,11 @@ public class PlayerBehavior : MonoBehaviour
         }
         else if (collision.collider.tag == "Obstacle")
         {
-            // die
+            levelManager.EndGame();
         }
         else if (collision.collider.tag == "Powerup")
         {
-            
+            collision.collider.GetComponent<PowerupManager>().Use();
         }
     }
 
