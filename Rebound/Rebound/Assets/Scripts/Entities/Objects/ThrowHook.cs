@@ -9,6 +9,7 @@ public class ThrowHook : MonoBehaviour
 
     public bool isRopeActive;
 
+    [HideInInspector]
     public GameObject curHook;
 
     public bool Throw(Vector2 target)

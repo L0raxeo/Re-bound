@@ -58,16 +58,14 @@ public class PlayerBehavior : MonoBehaviour
 
     private void CheckScreenCollision()
     {
-        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
-
-        if (pos.x < -0.05)
+        if (transform.position.x > 7.5f)
         {
-            transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(1.05f, pos.y)).x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(-7.5f, transform.position.y, transform.position.z);
             Destroy(hook.curHook);
         }
-        if (1.05 < pos.x)
+        if (transform.position.x < -7.5f)
         {
-            transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(0.05f, pos.y)).x, transform.position.y, transform.position.z);
+            transform.position = new Vector3(7.5f, transform.position.y, transform.position.z);
             Destroy(hook.curHook);
         }
     }
@@ -90,7 +88,23 @@ public class PlayerBehavior : MonoBehaviour
         }
         else if (collision.collider.tag == "Powerup")
         {
-            collision.collider.GetComponent<PowerupManager>().Use();
+            collision.collider.GetComponentInParent<PowerupManager>().Use();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name == "Lava")
+        {
+            // pull up Game Over menu
+        }
+        else if (collision.tag == "Obstacle")
+        {
+            levelManager.EndGame();
+        }
+        else if (collision.tag == "Powerup")
+        {
+            collision.GetComponentInParent<PowerupManager>().Use();
         }
     }
 
