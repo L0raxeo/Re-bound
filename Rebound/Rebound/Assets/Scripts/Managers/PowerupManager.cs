@@ -7,8 +7,6 @@ public class PowerupManager : MonoBehaviour
 
     private GameObject player;
 
-    public Rigidbody2D[] rb;
-
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -20,7 +18,6 @@ public class PowerupManager : MonoBehaviour
             UseBouncer();
         else if (gameObject.name.Contains("Destroyer"))
             UseDestroyer();
-
     }
 
     private void UseBouncer()
@@ -31,6 +28,7 @@ public class PowerupManager : MonoBehaviour
     private void UseDestroyer()
     {
         gameObject.GetComponent<Animator>().SetTrigger("Destroyed");
+        player.GetComponent<PlayerBehavior>().destroyCount = 3;
     }
 
     public void DestroyObjectAfterAnimation()

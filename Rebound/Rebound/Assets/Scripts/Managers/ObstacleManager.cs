@@ -46,7 +46,7 @@ public class ObstacleManager : MonoBehaviour
 
         while (GameObject.FindGameObjectsWithTag("Obstacle").Length + GameObject.FindGameObjectsWithTag("Powerup").Length < ObjectLimit)
         {
-            GameObject spawnObj = Instantiate(obstacles[(int) UnityEngine.Random.Range(1, 4)].prefab, PreLoadedObstaclePosition(), Quaternion.identity);
+            GameObject spawnObj = Instantiate(obstacles[(int) UnityEngine.Random.Range(1, 5)].prefab, PreLoadedObstaclePosition(), Quaternion.identity);
             foreach (GameObject checkedObj in GameObject.FindGameObjectsWithTag("Obstacle"))
             {
                 if (spawnObj == checkedObj)
@@ -59,15 +59,51 @@ public class ObstacleManager : MonoBehaviour
                 }
             }
 
+            int destroyerNum = 0;
+
             foreach (GameObject checkedObj in GameObject.FindGameObjectsWithTag("Powerup"))
             {
                 if (spawnObj == checkedObj)
                     continue;
 
+                if (spawnObj.name.Contains("Handle") && checkedObj.name.Contains("Head") || checkedObj.name.Contains("Destroyer") || spawnObj.name.Contains("Destroyer"))
+                    continue;
+
                 if (!PointIsValid(spawnObj, checkedObj))
                 {
                     Destroy(spawnObj);
+
+                    if (spawnObj.name.Contains("Destroyer"))
+                    {
+                        Debug.Log("Object being spawned: " + spawnObj.name);
+                        Debug.Log("Object being checked: " + checkedObj.name);
+                        Debug.Log("Distance between the two: " + Vector2.Distance(spawnObj.transform.position, checkedObj.transform.position));
+                    }
                     break;
+                }
+
+                if (checkedObj.name.Contains("Destroyer"))
+                    destroyerNum++;
+
+                if (checkedObj.transform.parent != null && checkedObj.transform.parent.name.Contains("Destroyer"))
+                    destroyerNum++;
+
+                if (destroyerNum > 1)
+                {
+                    Destroy(checkedObj);
+                    if (checkedObj.transform.parent != null)
+                        Destroy(checkedObj.transform.parent.gameObject);
+                }
+            }
+
+            if (destroyerNum > 1)
+            {
+                foreach (GameObject o in GameObject.FindGameObjectsWithTag("Powerup"))
+                {
+                    if (!o.name.Contains("Destroyer"))
+                        continue;
+
+                    Destroy(o);
                 }
             }
         }

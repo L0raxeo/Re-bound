@@ -10,6 +10,8 @@ public class PlayerBehavior : MonoBehaviour
 
     private bool touchedLastFrame = false;
 
+    public int destroyCount = 0;
+
     private void Update()
     {
         CheckInput();
@@ -18,7 +20,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Jump(Vector2 touchPosition)
     {
-        float xThrust = -250 * (touchPosition.x - transform.position.x); // xSlope
+        float xThrust = -250f * (touchPosition.x - transform.position.x); // xSlope
         float yThrust = -250f * (touchPosition.y - transform.position.y); // ySlope
 
         // put a cap for terminal velocity
@@ -58,14 +60,17 @@ public class PlayerBehavior : MonoBehaviour
 
     private void CheckScreenCollision()
     {
-        if (transform.position.x > 7.5f)
+        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+
+        if (pos.x < -0.05)
         {
-            transform.position = new Vector3(-7.5f, transform.position.y, transform.position.z);
+            transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(1.05f, pos.y)).x, transform.position.y, transform.position.z);
             Destroy(hook.curHook);
         }
-        if (transform.position.x < -7.5f)
+
+        if (1.05 < pos.x)
         {
-            transform.position = new Vector3(7.5f, transform.position.y, transform.position.z);
+            transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(0.05f, pos.y)).x, transform.position.y, transform.position.z);
             Destroy(hook.curHook);
         }
     }
@@ -78,6 +83,14 @@ public class PlayerBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (destroyCount > 0 && collision.collider.tag == "Obstacle")
+        {
+            Destroy(collision.collider.gameObject);
+            levelManager.m_camera.GetComponent<ScreenShakeController>().StartShake(0.75f, 0.5f);
+            destroyCount--;
+            return;
+        }
+
         if (collision.collider.name == "Lava")
         {
             // pull up Game Over menu
@@ -94,6 +107,14 @@ public class PlayerBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (destroyCount > 0 && collision.tag == "Obstacle")
+        {
+            Destroy(collision.gameObject);
+            levelManager.m_camera.GetComponent<ScreenShakeController>().StartShake(0.75f, 0.5f);
+            destroyCount--;
+            return;
+        }
+
         if (collision.name == "Lava")
         {
             // pull up Game Over menu
