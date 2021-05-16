@@ -39,7 +39,8 @@ public class CameraMovement : MonoBehaviour
 
     public void ResetCamera()
     {
-
+        deathAnim = false;
+        transform.position = new Vector3(0f, 0f, -10f);
     }
 
     public void DeathAnimation()

@@ -38,6 +38,14 @@ public class ObstacleManager : MonoBehaviour
         }
     }
 
+    public static void DestroyAllObstacles()
+    {
+        foreach (GameObject o in GameObject.FindGameObjectsWithTag("Obstacle"))
+        {
+            Destroy(o);
+        }
+    }
+
     private void GenerateLevel()
     {
         // Instantiate barrier

@@ -8,14 +8,18 @@ public class PlayerBehavior : MonoBehaviour
     public ThrowHook hook;
     public LevelManager levelManager;
 
+    public bool inGame = false;
     private bool touchedLastFrame = false;
 
     public int destroyCount = 0;
 
     private void Update()
     {
-        CheckInput();
-        CheckScreenCollision();
+        if (inGame)
+        {
+            CheckInput();
+            CheckScreenCollision();
+        }
     }
 
     private void Jump(Vector2 touchPosition)
@@ -73,6 +77,13 @@ public class PlayerBehavior : MonoBehaviour
             transform.position = new Vector3(Camera.main.ViewportToWorldPoint(new Vector2(0.05f, pos.y)).x, transform.position.y, transform.position.z);
             Destroy(hook.curHook);
         }
+    }
+
+    public void Respawn()
+    {
+        rb.velocity = Vector3.zero;
+        rb.MoveRotation(0f);
+        transform.position = new Vector3(0f, -12f, 0f);
     }
 
     public void Die()
