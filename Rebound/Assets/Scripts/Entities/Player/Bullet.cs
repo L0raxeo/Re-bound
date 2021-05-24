@@ -27,6 +27,7 @@ public class Bullet : MonoBehaviour
     private void Die()
     {
         Instantiate(explosion, transform.position, Quaternion.identity);
+        GameObject.FindObjectOfType<AudioManager>().Play("Explosion_SFX", false);
         Destroy(gameObject);
     }
 

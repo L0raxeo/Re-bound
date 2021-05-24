@@ -10,7 +10,7 @@ public class ObstacleManager : MonoBehaviour
     public GameObject m_camera;
 
     public int ObjectLimit;
-    private float yNextPos = 0f;
+    public float yNextPos = 0f;
 
     private void Update()
     {

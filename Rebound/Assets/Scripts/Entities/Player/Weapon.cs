@@ -30,6 +30,7 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     {
         Instantiate(bullet, muzzle.transform.position, Quaternion.Euler(0f, 0f, transform.rotation.z + GetAngleToPosition(targetPosition)));
+        GameObject.FindObjectOfType<AudioManager>().Play("Shoot_SFX", false);
         explosion.Clear();
         explosion.Play();
     }

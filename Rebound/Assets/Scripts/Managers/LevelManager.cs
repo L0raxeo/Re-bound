@@ -15,6 +15,11 @@ public class LevelManager : MonoBehaviour
 
     public StateManager stateManager;
 
+    private void Start()
+    {
+        //GameObject.FindObjectOfType<AudioManager>().Play();
+    }
+
     public void StartGame()
     {
         platform.SetActive(true);
@@ -22,8 +27,11 @@ public class LevelManager : MonoBehaviour
         ObstacleManager.DestroyAllObstacles();
 
         stateManager.SetState("Game State", false);
+        playerBehavior.inGame = true;
         playerBehavior.Respawn();
         cameraBehavior.ResetCamera();
+
+        GameObject.FindObjectOfType<ObstacleManager>().yNextPos = 0f;
     }
 
     public void EndGame()
@@ -32,8 +40,11 @@ public class LevelManager : MonoBehaviour
         platform.SetActive(false);
         lava.transform.position = new Vector3(0f, m_camera.transform.position.y - 40f, 0f);
 
+        playerBehavior.inGame = false;
         playerBehavior.Die();
         cameraBehavior.DeathAnimation();
+
+        stateManager.SetState("Game Over", false);
     }
 
 }

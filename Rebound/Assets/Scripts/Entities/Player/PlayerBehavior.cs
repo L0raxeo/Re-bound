@@ -9,19 +9,21 @@ public class PlayerBehavior : MonoBehaviour
     public LevelManager levelManager;
 
     public bool inGame = false;
-    private bool touchedLastFrame = false;
 
+    // For Destroyer powerup only
     public int destroyCount = 0;
 
+    // Makes sure that the user is in the game to move and collide
     private void Update()
     {
         if (inGame)
         {
             CheckInput();
-            CheckScreenCollision();
         }
+        CheckScreenCollision();
     }
 
+    // Movement
     private void Jump(Vector2 touchPosition)
     {
         float xThrust = -250f * (touchPosition.x - transform.position.x); // xSlope
@@ -42,11 +44,15 @@ public class PlayerBehavior : MonoBehaviour
         rb.AddForce(new Vector2(xThrust, yThrust));
     }
 
+    // Checks for touch input
+    private bool touchedLastFrame = false;
     private void CheckInput()
     {
+        // touchedLastFrame makes sure you can't hold down on screen to jump
         if (touchedLastFrame && Input.touchCount == 0)
         {
             touchedLastFrame = false;
+            // destroys any existing grapling hooks
             Destroy(hook.curHook);
         }
         else if (!touchedLastFrame && Input.touchCount == 1)
@@ -62,6 +68,7 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
+    // Checks if player is at the edge of the screen
     private void CheckScreenCollision()
     {
         Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
@@ -88,6 +95,7 @@ public class PlayerBehavior : MonoBehaviour
 
     public void Die()
     {
+        GameObject.FindObjectOfType<AudioManager>().Play("Die_SFX", false);
         rb.velocity = Vector3.zero;
         rb.AddTorque(50f);
     }
@@ -113,6 +121,7 @@ public class PlayerBehavior : MonoBehaviour
         else if (collision.collider.tag == "Powerup")
         {
             collision.collider.GetComponentInParent<PowerupManager>().Use();
+            GameObject.FindObjectOfType<AudioManager>().Play("Powerup_SFX", false);
         }
     }
 
@@ -136,6 +145,7 @@ public class PlayerBehavior : MonoBehaviour
         }
         else if (collision.tag == "Powerup")
         {
+            GameObject.FindObjectOfType<AudioManager>().Play("Powerup_SFX", false);
             collision.GetComponentInParent<PowerupManager>().Use();
         }
     }
