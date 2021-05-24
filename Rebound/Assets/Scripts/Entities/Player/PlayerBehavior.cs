@@ -7,6 +7,7 @@ public class PlayerBehavior : MonoBehaviour
     public Weapon weapon;
     public ThrowHook hook;
     public LevelManager levelManager;
+    public ScoreManager scoreManager;
 
     public bool inGame = false;
 
@@ -19,6 +20,7 @@ public class PlayerBehavior : MonoBehaviour
         if (inGame)
         {
             CheckInput();
+            scoreManager.UpdateScore(transform.position.y);
         }
         CheckScreenCollision();
     }

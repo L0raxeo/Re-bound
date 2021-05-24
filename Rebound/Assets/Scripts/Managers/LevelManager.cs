@@ -13,12 +13,8 @@ public class LevelManager : MonoBehaviour
     public PlayerBehavior playerBehavior;
     public CameraMovement cameraBehavior;
 
+    public ScoreManager scoreManager;
     public StateManager stateManager;
-
-    private void Start()
-    {
-        //GameObject.FindObjectOfType<AudioManager>().Play();
-    }
 
     public void StartGame()
     {
@@ -44,6 +40,7 @@ public class LevelManager : MonoBehaviour
         playerBehavior.Die();
         cameraBehavior.DeathAnimation();
 
+        scoreManager.ResetScoreManager();
         stateManager.SetState("Game Over", false);
     }
 
